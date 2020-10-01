@@ -42,8 +42,8 @@ def init():
     """
     Llama la funcion de inicializacion del modelo.
     """
-
-    return None
+    analyzer = model.newAnalyzer()
+    return analyzer
 
 
 # ___________________________________________________
@@ -51,13 +51,56 @@ def init():
 #  de datos en los modelos
 # ___________________________________________________
 
-def loadData(analyzer, accidentsfile):
+def loadData(analyzer, crimesfile):
     """
     Carga los datos de los archivos CSV en el modelo
     """
-    
+    crimesfile = cf.data_dir + crimesfile
+    input_file = csv.DictReader(open(crimesfile, encoding="utf-8"),
+                                delimiter=",")
+    for crime in input_file:
+        model.addCrime(analyzer, crime)
     return analyzer
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+
+def req1(analyzer, fecha):
+    fechaFormat = datetime.datetime.strptime(fecha, '%Y-%m-%d')
+    return model.req1(analyzer, fechaFormat)
+
+def crimesSize(analyzer):
+    """
+    Numero de crimenes leidos
+    """
+    return model.crimesSize(analyzer)
+
+
+def indexHeight(analyzer):
+    """
+    Altura del indice (arbol)
+    """
+    return model.indexHeight(analyzer)
+
+
+def indexSize(analyzer):
+    """
+    Numero de nodos en el arbol
+    """
+    return model.indexSize(analyzer)
+
+
+def minKey(analyzer):
+    """
+    La menor llave del arbol
+    """
+    return model.minKey(analyzer)
+
+
+def maxKey(analyzer):
+    """
+    La mayor llave del arbol
+    """
+    return model.maxKey(analyzer)
+
