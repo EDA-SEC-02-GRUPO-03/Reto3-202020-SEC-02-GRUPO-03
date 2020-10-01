@@ -38,7 +38,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-crimefile = 'crime-utf8.csv'
+accfile = "Data\\us_accidents_small.csv"
 
 # ___________________________________________________
 #  Menu principal
@@ -66,14 +66,18 @@ while True:
 
     if int(inputs[0]) == 1:
         print("\nInicializando....")
-        # cont es el controlador que se usará de acá en adelante
-        cont = controller.init()
+        analyzer = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de crimenes ....")
+        print("\nCargando información de accidentes ....")
+        accidentes = controller.loadData(analyzer, accfile)
+    
 
     elif int(inputs[0]) == 3:
-        print("\nBuscando crimenes en un rango de fechas: ")
+        print("\nReq1: ")
+        fecha = input('Ingrese la fecha YYYY-MM-DD: \n')
+        controller.ejecutarreq1(accidentes, fecha)
+
 
 
     elif int(inputs[0]) == 4:

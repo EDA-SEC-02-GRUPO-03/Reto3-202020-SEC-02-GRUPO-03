@@ -25,6 +25,7 @@ from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
 import datetime
+from time import process_time
 assert config
 
 """
@@ -40,13 +41,75 @@ es decir contiene los modelos con los datos en memoria
 
 
 # Funciones para agregar informacion al catalogo
+def newAnalyzer ():
+    analyzer = {'accidentes': None,
+                'fechas': None}
+    
+    analyzer['accidentes'] = lt.newList('SINGLE_LINKED', compareIds)
+    analyzer['fechas'] = om.newMap(omaptype='BST',
+                                   comparefunction=compareDates)
+    
+    return analyzer
+
+def addAccident(analyzer, accident):
+
+    lt.addLast(analyzer['accidentes'], accident)
+    updateDateIndex(analyzer, accident)
+
+    return analyzer
+
+
+def updateDateIndex(analyzer, accident):
+    
+    occurreddate = accident['Start_Time']
+    accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
+    severidad = accident['Severity']
+    entry = om.get(analyzer['fechas'], accidentdate.date())
+    if entry is None:
+        severidades = {}
+        severidades[severidad] = 1
+        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+    else:
+        severidades = me.getValue(entry)
+        if severidad in severidades:
+            severidades[severidad] += 1
+        else:
+            severidades[severidad] = 1
+        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+    return analyzer
 
 
 # ==============================
 # Funciones de consulta
 # ==============================
 
+def req1 (analyzer, fecha):
+    
+    entry = om.get(analyzer['fechas'], fecha)
+    dicc = me.getValue(entry)
+    return dicc
+        
+
 
 # ==============================
 # Funciones de Comparacion
 # ==============================
+
+def compareIds(id1, id2):
+
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+
+
+def compareDates(date1, date2):
+
+    if (date1 == date2):
+        return 0
+    elif (date1 > date2):
+        return 1
+    else:
+        return -1

@@ -23,6 +23,8 @@
 import config as cf
 from App import model
 import datetime
+from time import process_time
+from DISClib.ADT import list as lt
 import csv
 
 """
@@ -42,8 +44,8 @@ def init():
     """
     Llama la funcion de inicializacion del modelo.
     """
-
-    return None
+    a = model.newAnalyzer()
+    return a
 
 
 # ___________________________________________________
@@ -52,12 +54,28 @@ def init():
 # ___________________________________________________
 
 def loadData(analyzer, accidentsfile):
-    """
-    Carga los datos de los archivos CSV en el modelo
-    """
-    
+    t_i = process_time()
+    input_file = csv.DictReader(open(accidentsfile, encoding="utf-8"),
+                                delimiter=",")
+    for accident in input_file:
+        model.addAccident(analyzer, accident)
+    t_f = process_time()
+    print (t_f - t_i)
     return analyzer
+
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+def ejecutarreq1 (analyzer,fecha):
+    t_i = process_time()
+    fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
+    result = model.req1(analyzer,fecha.date())
+    total = 0
+    for i in result:
+        total += result[i]
+        print ('De severidad '+i+' hubo '+str(result[i])+' accidentes')
+    print ('Hubo '+str(total)+' accidentes en esa fecha.')
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    
