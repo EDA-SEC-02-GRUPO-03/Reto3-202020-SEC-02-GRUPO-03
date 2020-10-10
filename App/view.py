@@ -38,7 +38,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-crimefile = 'crime-utf8.csv'
+accfile = "Data\\us_accidents_small.csv"
 
 # ___________________________________________________
 #  Menu principal
@@ -66,26 +66,24 @@ while True:
 
     if int(inputs[0]) == 1:
         print("\nInicializando....")
-        # cont es el controlador que se usará de acá en adelante
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
         print("\nCargando información de crimenes ....")
-        controller.loadData(cont, crimefile)
+        controller.loadData(cont, accfile)
         print('Crimenes cargados: ' + str(controller.crimesSize(cont)))
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
-        print(type(cont),cont.keys())
-        print(type(cont['crimes']),type(cont['dateIndex']))
-        print(cont['crimes'].keys(),cont['dateIndex'].keys())
+
 
     elif int(inputs[0]) == 3:
         print("\nRequerimiento No 1 del reto 3: ")
-        fecha = input('Ingrese la fecha a buscar en formato AAAA-M-D: ')
-        info = controller.req1(cont, fecha)
-        pass
+        fecha = input('Ingrese la fecha YYYY-MM-DD: \n')
+        controller.req1(cont, fecha)
+
+
 
     elif int(inputs[0]) == 4:
         pass

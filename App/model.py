@@ -25,6 +25,7 @@ from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
 import datetime
+from time import process_time
 assert config
 
 """
@@ -48,45 +49,52 @@ def newAnalyzer():
 
     Retorna el analizador inicializado.
     """
-    analyzer = {'crimes': None,
-                'dateIndex': None
+    analyzer = {'accidentes': None,
+                'fechas': None
                 }
 
-    analyzer['crimes'] = lt.newList('SINGLE_LINKED', compareIds)
-    analyzer['dateIndex'] = om.newMap(omaptype='RBT',
+    analyzer['accidentes'] = lt.newList('SINGLE_LINKED', compareIds)
+    analyzer['fechas'] = om.newMap(omaptype='BST',
                                       comparefunction=compareDates)
     return analyzer
 
 
 # Funciones para agregar informacion al catalogo
 
-def addCrime(analyzer, crime):
-    """
-    """
-    lt.addLast(analyzer['crimes'], crime)
-    updateDateIndex(analyzer['dateIndex'], crime)
+
+def addAccident(analyzer, accident):
+
+    lt.addLast(analyzer['accidentes'], accident)
+    updateDateIndex(analyzer, accident)
+
     return analyzer
 
 
-def updateDateIndex(map, crime):
-    """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
+def updateDateIndex(analyzer, accident):
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
-    """
-    occurreddate = crime['OCCURRED_ON_DATE']
-    crimedate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
-    entry = om.get(map, crimedate.date())
+    occurreddate = accident['Start_Time']
+    accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
+    severidad = accident['Severity']
+    entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
-        datentry = newDataEntry(crime)
-        om.put(map, crimedate.date(), datentry)
+        severidades = {}
+        severidades[severidad] = 1
+        om.put(analyzer['fechas'], accidentdate.date(), severidades)
     else:
-        datentry = me.getValue(entry)
-    addDateIndex(datentry, crime)
-    return map
+        severidades = me.getValue(entry)
+        if severidad in severidades:
+            severidades[severidad] += 1
+        else:
+            severidades[severidad] = 1
+        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+    return analyzer
+
+def addCrime(analyzer, crime):
+    """
+    """
+    lt.addLast(analyzer['accidentes'], crime)
+    updateDateIndex(analyzer['fechas'], crime)
+    return analyzer
 
 
 def addDateIndex(datentry, crime):
@@ -96,7 +104,7 @@ def addDateIndex(datentry, crime):
     el valor es una lista con los crimenes de dicho tipo en la fecha que
     se está consultando (dada por el nodo del arbol)
     """
-    lst = datentry['lstcrimes']
+    lst = datentry['lstaccidentes']
     lt.addLast(lst, crime)
     offenseIndex = datentry['offenseIndex']
     offentry = m.get(offenseIndex, crime['OFFENSE_CODE_GROUP'])
@@ -115,11 +123,11 @@ def newDataEntry(crime):
     Crea una entrada en el indice por fechas, es decir en el arbol
     binario.
     """
-    entry = {'offenseIndex': None, 'lstcrimes': None}
+    entry = {'offenseIndex': None, 'lstaccidentes': None}
     entry['offenseIndex'] = m.newMap(numelements=30,
                                      maptype='PROBING',
                                      comparefunction=compareOffenses)
-    entry['lstcrimes'] = lt.newList('SINGLE_LINKED', compareDates)
+    entry['lstaccidentes'] = lt.newList('SINGLE_LINKED', compareDates)
     return entry
 
 
@@ -138,43 +146,44 @@ def newOffenseEntry(offensegrp, crime):
 # Funciones de consulta
 # ==============================
 
-def req1(analyzer, fecha):
-    crimedate = om.get(analyzer['dateIndex'], fecha)
-    if crimedate['key'] is not None:
-        offensemap = me.getValue(crimedate)['offenseIndex']
-        print(offensemap)
-    return 0
+
+def req1 (analyzer, fecha):
+
+    entry = om.get(analyzer['fechas'], fecha)
+    dicc = me.getValue(entry)
+    return dicc
 
 
-def crimesSize(analyzer):
+def accidentesSize(analyzer):
     """
     Número de libros en el catago
     """
-    return lt.size(analyzer['crimes'])
+    return lt.size(analyzer['accidentes'])
 
 
 def indexHeight(analyzer):
     """Numero de autores leido
     """
-    return om.height(analyzer['dateIndex'])
+    return om.height(analyzer['fechas'])
 
 
 def indexSize(analyzer):
     """Numero de autores leido
     """
-    return om.size(analyzer['dateIndex'])
+    return om.size(analyzer['fechas'])
 
 
 def minKey(analyzer):
     """Numero de autores leido
     """
-    return om.minKey(analyzer['dateIndex'])
+    return om.minKey(analyzer['fechas'])
 
 
 def maxKey(analyzer):
     """Numero de autores leido
     """
-    return om.maxKey(analyzer['dateIndex'])
+    return om.maxKey(analyzer['fechas'])
+
 
 
 # ==============================
@@ -182,9 +191,6 @@ def maxKey(analyzer):
 # ==============================
 
 def compareIds(id1, id2):
-    """
-    Compara dos crimenes
-    """
     if (id1 == id2):
         return 0
     elif id1 > id2:
@@ -194,10 +200,6 @@ def compareIds(id1, id2):
 
 
 def compareDates(date1, date2):
-    """
-    Compara dos ids de libros, id es un identificador
-    y entry una pareja llave-valor
-    """
     if (date1 == date2):
         return 0
     elif (date1 > date2):

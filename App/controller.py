@@ -23,6 +23,8 @@
 import config as cf
 from App import model
 import datetime
+from time import process_time
+from DISClib.ADT import list as lt
 import csv
 
 """
@@ -51,30 +53,40 @@ def init():
 #  de datos en los modelos
 # ___________________________________________________
 
-def loadData(analyzer, crimesfile):
-    """
-    Carga los datos de los archivos CSV en el modelo
-    """
-    crimesfile = cf.data_dir + crimesfile
-    input_file = csv.DictReader(open(crimesfile, encoding="utf-8"),
+def loadData(analyzer, accidentsfile):
+    t_i = process_time()
+    input_file = csv.DictReader(open(accidentsfile, encoding="utf-8"),
                                 delimiter=",")
-    for crime in input_file:
-        model.addCrime(analyzer, crime)
+    for accident in input_file:
+        model.addAccident(analyzer, accident)
+    t_f = process_time()
+    print (t_f - t_i)
     return analyzer
+
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
 
+
 def req1(analyzer, fecha):
-    fechaFormat = datetime.datetime.strptime(fecha, '%Y-%m-%d')
-    return model.req1(analyzer, fechaFormat)
+    t_i = process_time()
+    fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
+    result = model.req1(analyzer,fecha.date())
+    total = 0
+    for i in result:
+        total += result[i]
+        print ('De severidad '+i+' hubo '+str(result[i])+' accidentes')
+    print ('Hubo '+str(total)+' accidentes en esa fecha.')
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
+
 
 def crimesSize(analyzer):
     """
     Numero de crimenes leidos
     """
-    return model.crimesSize(analyzer)
+    return model.accidentesSize(analyzer)
 
 
 def indexHeight(analyzer):
@@ -103,4 +115,3 @@ def maxKey(analyzer):
     La mayor llave del arbol
     """
     return model.maxKey(analyzer)
-
