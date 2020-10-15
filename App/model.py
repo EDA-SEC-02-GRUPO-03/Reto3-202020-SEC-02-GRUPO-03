@@ -80,68 +80,15 @@ def updateDateIndex(analyzer, accident):
     if entry is None:
         severidades = {}
         severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': ID, 'severidades': severidades})
     else:
         severidades = me.getValue(entry)
         if severidad in severidades:
             severidades[severidad] += 1
         else:
             severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': ID, 'severidades': severidades})
     return analyzer
-
-def addCrime(analyzer, crime):
-    """
-    """
-    lt.addLast(analyzer['accidentes'], crime)
-    updateDateIndex(analyzer['fechas'], crime)
-    return analyzer
-
-
-def addDateIndex(datentry, crime):
-    """
-    Actualiza un indice de tipo de crimenes.  Este indice tiene una lista
-    de crimenes y una tabla de hash cuya llave es el tipo de crimen y
-    el valor es una lista con los crimenes de dicho tipo en la fecha que
-    se está consultando (dada por el nodo del arbol)
-    """
-    lst = datentry['lstaccidentes']
-    lt.addLast(lst, crime)
-    offenseIndex = datentry['offenseIndex']
-    offentry = m.get(offenseIndex, crime['OFFENSE_CODE_GROUP'])
-    if (offentry is None):
-        entry = newOffenseEntry(crime['OFFENSE_CODE_GROUP'], crime)
-        lt.addLast(entry['lstoffenses'], crime)
-        m.put(offenseIndex, crime['OFFENSE_CODE_GROUP'], entry)
-    else:
-        entry = me.getValue(offentry)
-        lt.addLast(entry['lstoffenses'], crime)
-    return datentry
-
-
-def newDataEntry(crime):
-    """
-    Crea una entrada en el indice por fechas, es decir en el arbol
-    binario.
-    """
-    entry = {'offenseIndex': None, 'lstaccidentes': None}
-    entry['offenseIndex'] = m.newMap(numelements=30,
-                                     maptype='PROBING',
-                                     comparefunction=compareOffenses)
-    entry['lstaccidentes'] = lt.newList('SINGLE_LINKED', compareDates)
-    return entry
-
-
-def newOffenseEntry(offensegrp, crime):
-    """
-    Crea una entrada en el indice por tipo de crimen, es decir en
-    la tabla de hash, que se encuentra en cada nodo del arbol.
-    """
-    ofentry = {'offense': None, 'lstoffenses': None}
-    ofentry['offense'] = offensegrp
-    ofentry['lstoffenses'] = lt.newList('SINGLELINKED', compareOffenses)
-    return ofentry
-
 
 # ==============================
 # Funciones de consulta
@@ -172,9 +119,12 @@ def req4(analyzer, fechamin, fechamax):
     lst = om.values(analyzer['fechas'], fechamin, fechamax)
     estados = {'ninguno': 0}
     ltestado = lt.newList()
+    print(lst)
 
     for i in range(1, lt.size(lst)):
-        value = lt.getElement(lst, i)
+        fecha = om.get(analyzer, )
+        ID = fecha['id']
+        value = lt.getElement(lst, id)
         estado = value['state']
         if lt.isPresent(ltestado, estado) == 0:
             lt.addLast(ltestado, estado)
