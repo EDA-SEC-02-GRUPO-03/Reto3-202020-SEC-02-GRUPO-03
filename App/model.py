@@ -75,6 +75,7 @@ def updateDateIndex(analyzer, accident):
     occurreddate = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     severidad = accident['Severity']
+    ID = accident['ID']
     entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
         severidades = {}
@@ -154,6 +155,14 @@ def req1 (analyzer, fecha):
     return dicc
 
 
+def req2 (analyzer, fecha):
+    pass
+
+
+def req3 (analyzer, fecha):
+    pass
+
+
 def req4(analyzer, fechamin, fechamax):
     """
     Conocer el estado con más accidentes en un rango de fechas.
@@ -180,6 +189,18 @@ def req4(analyzer, fechamin, fechamax):
             mayor = (i, estados[i])
 
     return mayor
+
+
+def req5 (analyzer, fecha):
+    pass
+
+
+def req6 (analyzer, fecha):
+    pass
+
+
+def req7 (analyzer, fecha):
+    pass
 
 
 def accidentesSize(analyzer):
