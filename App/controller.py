@@ -71,11 +71,14 @@ def ejecutarreq1 (analyzer,fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
     result = model.req1(analyzer,fecha.date())
-    total = 0
-    for i in result:
-        total += result[i]
-        print ('De severidad '+i+' hubo '+str(result[i])+' accidentes')
-    print ('Hubo '+str(total)+' accidentes en esa fecha.')
+    if result != None:
+        total = 0
+        for i in result:
+            total += result[i]
+            print ('De severidad '+i+' hubo '+str(result[i])+' accidentes')
+            print ('Hubo '+str(total)+' accidentes en esa fecha.')
+    else:
+        print ('No se encontró nada en esa fecha')
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')
     

@@ -86,9 +86,14 @@ def updateDateIndex(analyzer, accident):
 def req1 (analyzer, fecha):
     
     entry = om.get(analyzer['fechas'], fecha)
-    dicc = me.getValue(entry)
-    return dicc
-        
+    if entry != None:
+        dicc = me.getValue(entry)
+        return dicc
+    else:
+        return None
+
+def req2 (analyzer, fecha):
+    pass
 
 
 # ==============================
