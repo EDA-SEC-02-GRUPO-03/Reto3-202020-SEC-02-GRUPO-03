@@ -53,6 +53,11 @@ def printMenu():
     print("2- Cargar información de accidentes")
     print("3- Requerimento 1")
     print("4- Requerimento 2")
+    print("5- Requerimento 3")
+    print("6- Requerimento 4")
+    print("7- Requerimento 5")
+    print("8- Requerimento 6")
+    print("9- Requerimento 7")
     print("0- Salir")
     print("*******************************************")
 
@@ -83,6 +88,12 @@ while True:
         fecha = input('Ingrese la fecha YYYY-MM-DD: \n')
         controller.req1(cont, fecha)
 
+
+    elif int(inputs[0]) == 6:
+        print("\nRequerimiento No 4 del reto 3: ")
+        fechamin = input('Ingrese la fecha menor YYYY-MM-DD: \n')
+        fechamax = input('Ingrese la fecha mayor YYYY-MM-DD: \n')
+        controller.req4(cont, fechamin, fechamax)
 
 
     elif int(inputs[0]) == 4:

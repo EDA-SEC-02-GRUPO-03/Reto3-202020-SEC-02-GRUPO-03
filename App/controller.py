@@ -82,6 +82,22 @@ def req1(analyzer, fecha):
     print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 
+def req4(analyzer, fechamin, fechamax):
+    t_i = process_time()
+    fechamin = datetime.datetime.strptime(fechamin, '%Y-%m-%d')
+    fechamax = datetime.datetime.strptime(fechamax, '%Y-%m-%d')
+    # try:
+    result = model.req4(analyzer, fechamin.date(), fechamax.date())
+    print('El estado con más accidentes entre', fechamin, 'y', fechamax,
+            'es:\n\t', result[0], 'con', result[1], 'accidentes.')
+# except:
+    print('Hubo un error con el rango de fechas')
+# finally:
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
+
+
+
 def crimesSize(analyzer):
     """
     Numero de crimenes leidos

@@ -54,7 +54,7 @@ def newAnalyzer():
                 }
 
     analyzer['accidentes'] = lt.newList('SINGLE_LINKED', compareIds)
-    analyzer['fechas'] = om.newMap(omaptype='BST',
+    analyzer['fechas'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
     return analyzer
 
@@ -152,6 +152,34 @@ def req1 (analyzer, fecha):
     entry = om.get(analyzer['fechas'], fecha)
     dicc = me.getValue(entry)
     return dicc
+
+
+def req4(analyzer, fechamin, fechamax):
+    """
+    Conocer el estado con más accidentes en un rango de fechas.
+
+    William Mendez
+    """
+    lst = om.values(analyzer['fechas'], fechamin, fechamax)
+    estados = {'ninguno': 0}
+    ltestado = lt.newList()
+
+    for i in range(1, lt.size(lst)):
+        value = lt.getElement(lst, i)
+        estado = value['state']
+        if lt.isPresent(ltestado, estado) == 0:
+            lt.addLast(ltestado, estado)
+            estados[estado] = 1
+        else:
+            estados[estado] += 1
+
+    mayor = ('ninguno', 0)
+
+    for i in estados.keys():
+        if estados[i] >= estados[mayor[0]]:
+            mayor = (i, estados[i])
+
+    return mayor
 
 
 def accidentesSize(analyzer):
