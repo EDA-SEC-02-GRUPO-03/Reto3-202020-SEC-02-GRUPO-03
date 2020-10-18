@@ -60,22 +60,26 @@ def addAccident(analyzer, accident):
 
 
 def updateDateIndex(analyzer, accident):
-    
+
     occurreddate = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     severidad = accident['Severity']
+    ID = lt.size(analyzer['accidentes'])
     entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
         severidades = {}
         severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+        lista = lt.newList()
+        lt.addLast(lista, ID)
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': lista, 'severidades': severidades})
     else:
-        severidades = me.getValue(entry)
-        if severidad in severidades:
-            severidades[severidad] += 1
+        dicc = me.getValue(entry)
+        lt.addLast(dicc['id'],ID)
+        if severidad in dicc['severidades']:
+            dicc['severidades'][severidad] += 1
         else:
-            severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+            dicc['severidades'][severidad] = 1
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': dicc['id'], 'severidades': dicc['severidades']})
     return analyzer
 
 
