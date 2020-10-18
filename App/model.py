@@ -45,11 +45,11 @@ es decir contiene los modelos con los datos en memoria
 def newAnalyzer ():
     analyzer = {'accidentes': None,
                 'fechas': None}
-    
+
     analyzer['accidentes'] = lt.newList('SINGLE_LINKED', compareIds)
     analyzer['fechas'] = om.newMap(omaptype='RBT',
                                    comparefunction=compareDates)
-    
+
     return analyzer
 
 def addAccident(analyzer, accident):
@@ -61,22 +61,23 @@ def addAccident(analyzer, accident):
 
 
 def updateDateIndex(analyzer, accident):
-    
+
     occurreddate = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     severidad = accident['Severity']
+    ID = accident['ID']
     entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
         severidades = {}
         severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': ID, 'severidades': severidades})
     else:
         severidades = me.getValue(entry)
         if severidad in severidades:
             severidades[severidad] += 1
         else:
             severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), severidades)
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': ID, 'severidades': severidades})
     return analyzer
 
 
@@ -85,7 +86,7 @@ def updateDateIndex(analyzer, accident):
 # ==============================
 
 def req1 (analyzer, fecha):
-    
+
     entry = om.get(analyzer['fechas'], fecha)
     if entry != None:
         dicc = me.getValue(entry)
