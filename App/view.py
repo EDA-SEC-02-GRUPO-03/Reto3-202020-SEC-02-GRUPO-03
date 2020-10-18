@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from App import controller
 assert config
+import datetime
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -39,6 +40,10 @@ operación seleccionada.
 
 
 accfile = "Data\\us_accidents_small.csv"
+mini = '2016-02-08'
+fecha_min = datetime.datetime.strptime(mini, '%Y-%m-%d')
+maxi  = '2019-08-23'
+fecha_max = datetime.datetime.strptime(maxi, '%Y-%m-%d')
 
 # ___________________________________________________
 #  Menu principal
@@ -82,7 +87,8 @@ while True:
 
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 1 del reto 3: ")
-
+        fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
+        controller.ejecutarreq2(accidentes, fecha_min, fecha)
     else:
         sys.exit(0)
 sys.exit(0)

@@ -40,6 +40,7 @@ recae sobre el controlador.
 # ___________________________________________________
 
 
+
 def init():
     """
     Llama la funcion de inicializacion del modelo.
@@ -76,9 +77,16 @@ def ejecutarreq1 (analyzer,fecha):
         for i in result:
             total += result[i]
             print ('De severidad '+i+' hubo '+str(result[i])+' accidentes')
-            print ('Hubo '+str(total)+' accidentes en esa fecha.')
+        print ('Hubo '+str(total)+' accidentes en esa fecha.')
     else:
         print ('No se encontró nada en esa fecha')
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')
-    
+
+def ejecutarreq2 (analyzer,fecha_min, fecha):
+    t_i = process_time()
+    fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
+    result = model.req2(analyzer,fecha_min.date(), fecha.date())
+    print (lt.size(result))
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')

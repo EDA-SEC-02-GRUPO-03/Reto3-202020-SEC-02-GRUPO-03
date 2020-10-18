@@ -40,13 +40,14 @@ es decir contiene los modelos con los datos en memoria
 # -----------------------------------------------------
 
 
+
 # Funciones para agregar informacion al catalogo
 def newAnalyzer ():
     analyzer = {'accidentes': None,
                 'fechas': None}
     
     analyzer['accidentes'] = lt.newList('SINGLE_LINKED', compareIds)
-    analyzer['fechas'] = om.newMap(omaptype='BST',
+    analyzer['fechas'] = om.newMap(omaptype='RBT',
                                    comparefunction=compareDates)
     
     return analyzer
@@ -92,8 +93,12 @@ def req1 (analyzer, fecha):
     else:
         return None
 
-def req2 (analyzer, fecha):
-    pass
+def req2 (analyzer, fecha_min, fecha):
+    
+    lst = om.values(analyzer['fechas'], fecha_min, fecha)
+    for i in range(1,lt.size(lst)+1):
+        dato = om.get(analyzer['fechas'], i)
+
 
 
 # ==============================
