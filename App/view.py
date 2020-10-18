@@ -101,8 +101,8 @@ while True:
 
     elif int(inputs[0]) == 7:
         print("\nRequerimiento No 5 del reto 3: ")
-        h1 = input('Ingrese la hora menor en formato 24h: \n')
-        h2 = input('Ingrese la hora mayor en formato 24h: \n')
+        h1 = input('Ingrese la hora menor en formato 24h (HH:MM): \n')
+        h2 = input('Ingrese la hora mayor en formato 24h (HH:MM): \n')
         controller.req5(cont, h1, h2)
 
 

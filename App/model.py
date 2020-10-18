@@ -76,7 +76,7 @@ def updateDateIndex(analyzer, accident):
     # print(occurreddate)
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     severidad = accident['Severity']
-    ID = lt.size(analyzer['accidentes'])
+    ID = (lt.size(analyzer['accidentes'])) + 1
     # print(ID)
     entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
@@ -84,7 +84,7 @@ def updateDateIndex(analyzer, accident):
         severidades[severidad] = 1
         ids = lt.newList('SINGLE_LINKED', compareIds)
         lt.addLast(ids, ID)
-        print(ids['type'])
+        # print(ids['type'])
         om.put(analyzer['fechas'], accidentdate.date(), {'id': ids, 'severidades': severidades})
     else:
         severidades = me.getValue(entry)
@@ -93,7 +93,7 @@ def updateDateIndex(analyzer, accident):
             severidades[severidad] += 1
         else:
             severidades[severidad] = 1
-        print(severidades['id']['type'])
+        # print(severidades['id']['type'])
         om.put(analyzer['fechas'], accidentdate.date(), {'id': severidades['id'], 'severidades': severidades})
     return analyzer
 
@@ -127,7 +127,7 @@ def req4(analyzer, fechamin, fechamax):
     estados = {'ninguno': 0}
     # print(lst)
 
-    for i in range(1, lt.size(lst)):
+    for i in range(1, lt.size(lst) + 1):
         fecha = lt.getElement(lst, i)
         # print(fecha)
         valor = om.get(analyzer['fechas'], fecha)
@@ -135,7 +135,7 @@ def req4(analyzer, fechamin, fechamax):
         # ids = om.get(valor, 'id')
         ids = valor['value']['id']
         # print('\n',om.get(valor, 'id'))
-        for i in range(1, lt.size(ids)):
+        for i in range(1, lt.size(ids) + 1):
             ID = lt.getElement(ids, i)
             print(i, ID)
             value = lt.getElement(analyzer['accidentes'], ID)
@@ -156,8 +156,22 @@ def req4(analyzer, fechamin, fechamax):
 
 
 def req5 (analyzer, h1, h2):
-    for i in analyzer['accidentes']:
-        pass
+    n_acc = {'total': 0,
+             '1': 0,
+             '2': 0,
+             '3': 0,
+             '4': 0}
+    for i in range(1, lt.size(analyzer['accidentes']) + 1):
+        info = lt.getElement(analyzer['accidentes'], i)
+        if datetime.datetime.__ge__(datetime.datetime.strptime( \
+           info['Start_Time'][-8:-3], '%H:%M'), h1) and \
+           datetime.datetime.__le__(datetime.datetime.strptime( \
+           info['End_Time'][-8:-3], '%H:%M'), h2):
+            n_acc['total'] += 1
+            n_acc[info['Severity']] += 1
+    porc = round(n_acc['total'] * 100 / accidentesSize(analyzer), 2)
+    n_acc['porc'] = porc
+    return n_acc
 
 
 def req6 (analyzer, fecha):

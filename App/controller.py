@@ -60,7 +60,7 @@ def loadData(analyzer, accidentsfile):
     for accident in input_file:
         model.addAccident(analyzer, accident)
     t_f = process_time()
-    print (t_f - t_i)
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
     return analyzer
 
 
@@ -102,17 +102,38 @@ def req4(analyzer, fechamin, fechamax):
 
 def req5(analyzer, h1, h2):
     t_i = process_time()
-    h1 = datetime.time(h1)
-    h2 = datetime.time(h2)
-    # try:
-    result = model.req5(analyzer, h1, h2)
-    print('El estado con más accidentes entre', h1, 'y', h2,
-            'es:\n\t', result[0], 'con', result[1], 'accidentes.')
-# except:
-    print('Hubo un error con el rango de fechas')
-# finally:
-    t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    if int(h1[3:]) < 15:
+        h1 = h1[:2] + ':00'
+    elif int(h2[3:]) < 15:
+        h2 = h2[:2] + ':00'
+    elif int(h1[3:]) >= 15 and int(h1[3:]) < 45:
+        h1 = h1[:2] + ':30'
+    elif int(h2[3:]) >= 15 and int(h2[3:]) < 45:
+        h2 = h2[:2] + ':30'
+    elif int(h1[3:]) >= 45:
+        h1 = str(int(h1[:2]) + 1) + ':00'
+    elif int(h2[3:]) >= 45:
+        h2 = str(int(h2[:2]) + 1) + ':00'
+
+    if int(h1[3:]) >= 60 or int(h2[3:]) >= 60 or \
+        int(h1[:2]) >= 24 or int(h2[:2]) >= 24 or len(h1 + h2) < 10:
+        print('Hora no válida\n')
+
+    else:
+        h1 = datetime.time(int(h1[:2]), int(h1[3:]))
+        h2 = datetime.time(int(h2[:2]), int(h2[3:]))
+        try:
+            result = model.req5(analyzer, h1, h2)
+            print('Los resultados entre las', h1, 'y', h2,
+                    'son:\n-', result['porc'], '% (', result['total'], ') del', \
+                    'total de accidentes. Se agrupan de la suiguente manera:')
+            for i in range(1, 5):
+                print('severidad', i, ':\t', result[str(i)])
+        except:
+            print('Hubo un error con el rango de fechas')
+        finally:
+            t_f = process_time()
+            print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 
 
