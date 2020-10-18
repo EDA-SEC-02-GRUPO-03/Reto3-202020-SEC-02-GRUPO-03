@@ -23,6 +23,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
+from DISClib.DataStructures import linkedlistiterator as it
 from DISClib.ADT import map as m
 import datetime
 from time import process_time
@@ -76,7 +77,7 @@ def updateDateIndex(analyzer, accident):
     # print(occurreddate)
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     severidad = accident['Severity']
-    ID = (lt.size(analyzer['accidentes'])) + 1
+    ID = (lt.size(analyzer['accidentes']))
     # print(ID)
     entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
@@ -127,31 +128,40 @@ def req4(analyzer, fechamin, fechamax):
     estados = {'ninguno': 0}
     # print(lst)
 
-    for i in range(1, lt.size(lst) + 1):
-        fecha = lt.getElement(lst, i)
-        # print(fecha)
-        valor = om.get(analyzer['fechas'], fecha)
-        print('1\n', valor['type'])
-        # ids = om.get(valor, 'id')
-        ids = valor['value']['id']
-        # print('\n',om.get(valor, 'id'))
-        for i in range(1, lt.size(ids) + 1):
-            ID = lt.getElement(ids, i)
-            print(i, ID)
-            value = lt.getElement(analyzer['accidentes'], ID)
-            # print('3\n',value)
-            estado = value['State']
-            if estado not in estados.keys():
-                estados[estado] = 1
-            else:
-                estados[estado] += 1
+    iterator = it.newIterator(lst)
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        # print (element)
+        # print (type(element))
+
+        if type(element) == type(fechamax):
+
+            # fecha = lt.getElement(lst, i)
+            # print(fecha)
+            valor = om.get(analyzer['fechas'], element)
+            # print('1\n', valor['type'])
+            # ids = om.get(valor, 'id')
+            ids = valor['value']['id']
+            # print('\n',om.get(valor, 'id'))
+            for j in range(1, lt.size(ids) + 1):
+                ID = lt.getElement(ids, j)
+                # print(j, ID)
+                value = lt.getElement(analyzer['accidentes'], ID)
+                # print('3\n',value)
+                estado = value['State']
+                if estado not in estados.keys():
+                    estados[estado] = 1
+                else:
+                    estados[estado] += 1
 
     mayor = ('ninguno', 0)
-
+    # ahh = 0
     for i in estados.keys():
+        # print(i, estados[i], ahh)
+        # ahh += estados[i]
         if estados[i] >= estados[mayor[0]]:
             mayor = (i, estados[i])
-
+    # print(ahh)
     return mayor
 
 

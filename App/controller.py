@@ -85,19 +85,19 @@ def req1(analyzer, fecha):
     print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 
-def req4(analyzer, fechamin, fechamax):
+def req4(analyzer, fechami, fechama):
     t_i = process_time()
-    fechamin = datetime.datetime.strptime(fechamin, '%Y-%m-%d')
-    fechamax = datetime.datetime.strptime(fechamax, '%Y-%m-%d')
-    # try:
-    result = model.req4(analyzer, fechamin.date(), fechamax.date())
-    print('El estado con más accidentes entre', fechamin, 'y', fechamax,
-            'es:\n\t', result[0], 'con', result[1], 'accidentes.')
-# except:
-    print('Hubo un error con el rango de fechas')
-# finally:
-    t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    fechamin = datetime.datetime.strptime(fechami, '%Y-%m-%d')
+    fechamax = datetime.datetime.strptime(fechama, '%Y-%m-%d')
+    try:
+        result = model.req4(analyzer, fechamin.date(), fechamax.date())
+        print('El estado con más accidentes entre', fechami, 'y', fechama, \
+                'es:\n -', result[0], 'con', result[1], 'accidentes.')
+    except:
+        print('Hubo un error con el rango de fechas')
+    finally:
+        t_f = process_time()
+        print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 
 def req5(analyzer, h1, h2):
@@ -125,7 +125,7 @@ def req5(analyzer, h1, h2):
         try:
             result = model.req5(analyzer, h1, h2)
             print('Los resultados entre las', h1, 'y', h2,
-                    'son:\n-', result['porc'], '% (', result['total'], ') del', \
+                    'son:\n -', result['porc'], '% (', result['total'], ') del', \
                     'total de accidentes. Se agrupan de la suiguente manera:')
             for i in range(1, 5):
                 print('severidad', i, ':\t', result[str(i)])
