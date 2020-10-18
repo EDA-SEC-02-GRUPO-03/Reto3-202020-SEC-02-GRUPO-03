@@ -89,15 +89,22 @@ while True:
         controller.req1(cont, fecha)
 
 
+    elif int(inputs[0]) == 4:
+        pass
+
+
     elif int(inputs[0]) == 6:
         print("\nRequerimiento No 4 del reto 3: ")
         fechamin = input('Ingrese la fecha menor YYYY-MM-DD: \n')
         fechamax = input('Ingrese la fecha mayor YYYY-MM-DD: \n')
         controller.req4(cont, fechamin, fechamax)
 
+    elif int(inputs[0]) == 7:
+        print("\nRequerimiento No 5 del reto 3: ")
+        h1 = input('Ingrese la hora menor en formato 24h: \n')
+        h2 = input('Ingrese la hora mayor en formato 24h: \n')
+        controller.req5(cont, h1, h2)
 
-    elif int(inputs[0]) == 4:
-        pass
 
     else:
         sys.exit(0)

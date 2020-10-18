@@ -73,21 +73,28 @@ def addAccident(analyzer, accident):
 def updateDateIndex(analyzer, accident):
 
     occurreddate = accident['Start_Time']
+    # print(occurreddate)
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     severidad = accident['Severity']
-    ID = accident['ID']
+    ID = lt.size(analyzer['accidentes'])
+    # print(ID)
     entry = om.get(analyzer['fechas'], accidentdate.date())
     if entry is None:
         severidades = {}
         severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), {'id': ID, 'severidades': severidades})
+        ids = lt.newList('SINGLE_LINKED', compareIds)
+        lt.addLast(ids, ID)
+        print(ids['type'])
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': ids, 'severidades': severidades})
     else:
         severidades = me.getValue(entry)
+        lt.addLast(severidades['id'], ID)
         if severidad in severidades:
             severidades[severidad] += 1
         else:
             severidades[severidad] = 1
-        om.put(analyzer['fechas'], accidentdate.date(), {'id': ID, 'severidades': severidades})
+        print(severidades['id']['type'])
+        om.put(analyzer['fechas'], accidentdate.date(), {'id': severidades['id'], 'severidades': severidades})
     return analyzer
 
 # ==============================
@@ -118,19 +125,26 @@ def req4(analyzer, fechamin, fechamax):
     """
     lst = om.values(analyzer['fechas'], fechamin, fechamax)
     estados = {'ninguno': 0}
-    ltestado = lt.newList()
-    print(lst)
+    # print(lst)
 
     for i in range(1, lt.size(lst)):
-        fecha = om.get(analyzer, )
-        ID = fecha['id']
-        value = lt.getElement(lst, id)
-        estado = value['state']
-        if lt.isPresent(ltestado, estado) == 0:
-            lt.addLast(ltestado, estado)
-            estados[estado] = 1
-        else:
-            estados[estado] += 1
+        fecha = lt.getElement(lst, i)
+        # print(fecha)
+        valor = om.get(analyzer['fechas'], fecha)
+        print('1\n', valor['type'])
+        # ids = om.get(valor, 'id')
+        ids = valor['value']['id']
+        # print('\n',om.get(valor, 'id'))
+        for i in range(1, lt.size(ids)):
+            ID = lt.getElement(ids, i)
+            print(i, ID)
+            value = lt.getElement(analyzer['accidentes'], ID)
+            # print('3\n',value)
+            estado = value['State']
+            if estado not in estados.keys():
+                estados[estado] = 1
+            else:
+                estados[estado] += 1
 
     mayor = ('ninguno', 0)
 
@@ -141,8 +155,9 @@ def req4(analyzer, fechamin, fechamax):
     return mayor
 
 
-def req5 (analyzer, fecha):
-    pass
+def req5 (analyzer, h1, h2):
+    for i in analyzer['accidentes']:
+        pass
 
 
 def req6 (analyzer, fecha):
