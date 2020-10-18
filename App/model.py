@@ -24,6 +24,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
+from DISClib.DataStructures import linkedlistiterator as it
 import datetime
 from time import process_time
 assert config
@@ -100,8 +101,31 @@ def req1 (analyzer, fecha):
 def req2 (analyzer, fecha_min, fecha):
     
     lst = om.values(analyzer['fechas'], fecha_min, fecha)
-    for i in range(1,lt.size(lst)+1):
-        dato = om.get(analyzer['fechas'], i)
+    print (lst)
+    total = 0
+    maxi = 0
+    mas_acc = fecha_min
+    iterator = it.newIterator(lst)
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        print (element)
+        print (type(element))
+        
+        if type(element) == type(fecha):
+            valor = req1(analyzer, element)
+            print(lt.size(valor['id']))
+            total += lt.size(valor['id'])
+            if lt.size(valor['id']) > maxi:
+                mas_acc = element
+                maxi = lt.size(valor['id'])
+        else:
+            print(lt.size(element['id']))
+            total += lt.size(element['id'])
+            if lt.size(element['id']) > maxi:
+                mas_acc = element
+                maxi = lt.size(valor['id'])
+
+    return (total, mas_acc)
 
 
 

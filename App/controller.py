@@ -72,7 +72,6 @@ def ejecutarreq1 (analyzer,fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
     result = model.req1(analyzer,fecha.date())
-    print (result)
     if result != None:
         total = 0
         for i in result['severidades']:
@@ -88,6 +87,7 @@ def ejecutarreq2 (analyzer,fecha_min, fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
     result = model.req2(analyzer,fecha_min.date(), fecha.date())
-    print (lt.size(result))
+    print ('Entre esas fechas hubo', result[0], 'accidentes')
+    print ('La fecha de más accidentes fue ', result[1])
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')
