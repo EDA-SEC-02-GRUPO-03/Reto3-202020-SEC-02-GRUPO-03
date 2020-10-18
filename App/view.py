@@ -86,7 +86,7 @@ while True:
 
 
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 1 del reto 3: ")
+        print("\nReq2 ")
         fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
         controller.ejecutarreq2(accidentes, fecha_min, fecha)
     else:
