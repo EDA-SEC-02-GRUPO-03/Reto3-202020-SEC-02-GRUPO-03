@@ -120,43 +120,42 @@ def req4(analyzer, fechamin, fechamax):
     William Mendez
     """
     lst = om.values(analyzer['fechas'], fechamin, fechamax)
-    estados = {'ninguno': 0}
-    # print(lst)
+    estados = {'ninguno': {'cont': 0}}
 
     iterator = it.newIterator(lst)
     while it.hasNext(iterator):
         element = it.next(iterator)
-        # print (element)
-        # print (type(element))
 
         if type(element) == type(fechamax):
 
-            # fecha = lt.getElement(lst, i)
-            # print(fecha)
             valor = om.get(analyzer['fechas'], element)
-            # print('1\n', valor['type'])
-            # ids = om.get(valor, 'id')
             ids = valor['value']['id']
-            # print('\n',om.get(valor, 'id'))
             for j in range(1, lt.size(ids) + 1):
                 ID = lt.getElement(ids, j)
-                # print(j, ID)
                 value = lt.getElement(analyzer['accidentes'], ID)
-                # print('3\n',value)
                 estado = value['State']
+
                 if estado not in estados.keys():
-                    estados[estado] = 1
+                    estados[estado] = {}
+                    estados[estado]['cont'] = 1
                 else:
-                    estados[estado] += 1
+                    estados[estado]['cont'] += 1
+
+                if element not in estados[estado].keys():
+                    estados[estado][element] = 1
+                else:
+                    estados[estado][element] += 1
 
     mayor = ('ninguno', 0)
-    # ahh = 0
     for i in estados.keys():
-        # print(i, estados[i], ahh)
-        # ahh += estados[i]
-        if estados[i] >= estados[mayor[0]]:
-            mayor = (i, estados[i])
-    # print(ahh)
+        # print(estados[i])
+        if estados[i]['cont'] >= estados[mayor[0]]['cont']:
+            fechamay = ('none', 0)
+            for j in estados[i].keys():
+                if estados[i][j] >= fechamay[1] and j != 'cont':
+                    fechamay = (j, estados[i][j])
+            fechamay = str(fechamay[0]) + ' con ' + str(fechamay[1])
+            mayor = (i, estados[i]['cont'], fechamay)
     return mayor
 
 
@@ -180,10 +179,6 @@ def req5 (analyzer, h1, h2):
 
 
 def req6 (analyzer, fecha):
-    pass
-
-
-def req7 (analyzer, fecha):
     pass
 
 

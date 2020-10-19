@@ -39,6 +39,7 @@ operación seleccionada.
 
 
 accfile = "Data\\us_accidents_small.csv"
+# accfile = "Data\\us_accidents_dis_2017.csv"
 
 # ___________________________________________________
 #  Menu principal
