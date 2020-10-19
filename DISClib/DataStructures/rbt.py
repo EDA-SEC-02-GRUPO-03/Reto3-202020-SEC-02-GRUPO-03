@@ -101,7 +101,7 @@ def get(rbt, key):
     try:
         return getNode(rbt['root'], key, rbt['cmpfunction'])
     except Exception as exp:
-        error.reraise(exp, 'RBR:get')
+        error.reraise(exp, 'RBT:get')
 
 
 def remove(rbt, key):
