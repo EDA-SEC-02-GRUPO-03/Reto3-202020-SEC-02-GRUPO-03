@@ -119,7 +119,7 @@ def req4(analyzer, fechamin, fechamax):
 
     William Mendez
     """
-    lst = om.values(analyzer['fechas'], fechamin, fechamax)
+    lst = om.keys(analyzer['fechas'], fechamin, fechamax)
     estados = {'ninguno': {'cont': 0}}
 
     iterator = it.newIterator(lst)
