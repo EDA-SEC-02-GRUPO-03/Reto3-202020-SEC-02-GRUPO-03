@@ -39,7 +39,8 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accfile = "Data\\us_accidents_small.csv"
+#accfile = "Data\\us_accidents_small.csv"
+accfile = "Data\\US_Accidents_Dec19.csv"
 mini = '2016-02-08'
 fecha_min = datetime.datetime.strptime(mini, '%Y-%m-%d')
 maxi  = '2019-08-23'
