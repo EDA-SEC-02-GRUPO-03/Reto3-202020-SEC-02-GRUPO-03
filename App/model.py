@@ -108,21 +108,17 @@ def req2 (analyzer, fecha_min, fecha):
     iterator = it.newIterator(lst)
     while it.hasNext(iterator):
         element = it.next(iterator)
-        print (element)
-        print (type(element))
         
         if type(element) == type(fecha):
             valor = req1(analyzer, element)
-            print(lt.size(valor['id']))
             total += lt.size(valor['id'])
             if lt.size(valor['id']) > maxi:
                 mas_acc = element
                 maxi = lt.size(valor['id'])
-        else:
-            print(lt.size(element['id']))
-            total += lt.size(element['id'])
-            if lt.size(element['id']) > maxi:
-                mas_acc = element
+        #else:
+         #   total += lt.size(element['id'])
+          #  if lt.size(element['id']) > maxi:
+           #     mas_acc = element
                 maxi = lt.size(valor['id'])
 
     return (total, mas_acc)

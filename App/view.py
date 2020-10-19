@@ -40,11 +40,14 @@ operación seleccionada.
 
 
 #accfile = "Data\\us_accidents_small.csv"
-accfile = "Data\\US_Accidents_Dec19.csv"
+accfile = "Data\\Acc2016.csv"
+#accfile = 'Data\\Acc2017.csv'
+#accfile = 'Data\\Acc2018.csv'
+#accfile = 'Data\\Acc2019.csv'
+#accfile = 'Data\\AccTodos.csv'
+
 mini = '2016-02-08'
 fecha_min = datetime.datetime.strptime(mini, '%Y-%m-%d')
-maxi  = '2019-08-23'
-fecha_max = datetime.datetime.strptime(maxi, '%Y-%m-%d')
 
 # ___________________________________________________
 #  Menu principal
@@ -77,6 +80,7 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nCargando información de accidentes ....")
         accidentes = controller.loadData(analyzer, accfile)
+        
     
 
     elif int(inputs[0]) == 3:
