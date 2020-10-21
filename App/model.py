@@ -26,6 +26,7 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
 from DISClib.DataStructures import linkedlistiterator as it
 import datetime
+import math
 from time import process_time
 assert config
 
@@ -100,8 +101,7 @@ def req1 (analyzer, fecha):
 
 def req2 (analyzer, fecha_min, fecha):
     
-    lst = om.values(analyzer['fechas'], fecha_min, fecha)
-    print (lst)
+    lst = om.keys(analyzer['fechas'], fecha_min, fecha)
     total = 0
     maxi = 0
     mas_acc = fecha_min
@@ -115,13 +115,52 @@ def req2 (analyzer, fecha_min, fecha):
             if lt.size(valor['id']) > maxi:
                 mas_acc = element
                 maxi = lt.size(valor['id'])
-        #else:
-         #   total += lt.size(element['id'])
-          #  if lt.size(element['id']) > maxi:
-           #     mas_acc = element
+        else:
+            total += lt.size(element['id'])
+            if lt.size(element['id']) > maxi:
+                mas_acc = element
                 maxi = lt.size(valor['id'])
 
-    return (total, mas_acc)
+    return (total, mas_acc, maxi)
+
+def req6 (analyzer, lat_centro, lon_centro, radio):
+    total = 0
+    dias = {'Lunes': 0,
+            'Martes': 0,
+            'Miercoles': 0,
+            'Jueves': 0,
+            'Viernes': 0,
+            'Sabado': 0,
+            'Domingo': 0
+            }
+    iterator = it.newIterator(analyzer['accidentes'])
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        haver_entrada = (math.sin( math.radians((float(element['Start_Lat']) - lat_centro)) /2 ))**2 \
+                        + math.cos(math.radians(float(element['Start_Lat']))) \
+                        * math.cos(math.radians(float(element['Start_Lat']))) \
+                        * (math.sin(math.radians((float(element['Start_Lng']) - lon_centro)) /2 ))**2
+        d = 2*6371*math.asin(math.sqrt(haver_entrada))
+        if d <= radio:
+            total += 1
+            occurreddate = element['Start_Time']
+            accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
+            if accidentdate.weekday() == 0:
+                dias['Lunes'] += 1
+            elif accidentdate.weekday() == 1:
+                dias['Martes'] += 1
+            elif accidentdate.weekday() == 2:
+                dias['Miercoles'] += 1
+            elif accidentdate.weekday() == 3:
+                dias['Jueves'] += 1
+            elif accidentdate.weekday() == 4:
+                dias['Viernes'] += 1
+            elif accidentdate.weekday() == 5:
+                dias['Sabado'] += 1
+            elif accidentdate.weekday() == 6:
+                dias['Domingo'] += 1
+    return (total, dias)
+        
 
 
 

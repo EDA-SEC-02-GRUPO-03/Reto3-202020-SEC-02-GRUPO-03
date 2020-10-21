@@ -88,6 +88,14 @@ def ejecutarreq2 (analyzer,fecha_min, fecha):
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
     result = model.req2(analyzer,fecha_min.date(), fecha.date())
     print ('Entre esas fechas hubo', result[0], 'accidentes')
-    print ('La fecha de más accidentes fue ', result[1])
+    print ('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
+
+def ejecutarreq6 (analyzer, lat, lon, radio):
+    t_i = process_time()
+    result = model.req6(analyzer, lat, lon, radio)
+    print ('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
+    print (result[1])
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')

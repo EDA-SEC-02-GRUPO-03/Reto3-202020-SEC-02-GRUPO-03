@@ -38,6 +38,7 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
+sys.setrecursionlimit(3000000)
 
 #accfile = "Data\\us_accidents_small.csv"
 accfile = "Data\\Acc2016.csv"
@@ -62,6 +63,7 @@ def printMenu():
     print("2- Cargar información de accidentes")
     print("3- Requerimento 1")
     print("4- Requerimento 2")
+    print("5- Requerimento 6")
     print("0- Salir")
     print("*******************************************")
 
@@ -94,6 +96,14 @@ while True:
         print("\nReq2 ")
         fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
         controller.ejecutarreq2(accidentes, fecha_min, fecha)
+    
+    elif int(inputs[0]) == 5:
+        print("\nReq6 ")
+        radio = float(input('Ingrese el radio en kilómetros: \n'))
+        lat = float(input('Ingrese la latitud: \n'))
+        lon = float(input('Ingrese la longitud: \n'))
+        controller.ejecutarreq6(analyzer, lat, lon, radio)
+
     else:
         sys.exit(0)
 sys.exit(0)
