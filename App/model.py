@@ -24,7 +24,9 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
+from DISClib.DataStructures import linkedlistiterator as it
 import datetime
+import math
 from time import process_time
 assert config
 
@@ -40,13 +42,14 @@ es decir contiene los modelos con los datos en memoria
 # -----------------------------------------------------
 
 
+
 # Funciones para agregar informacion al catalogo
 def newAnalyzer ():
     analyzer = {'accidentes': None,
                 'fechas': None}
 
     analyzer['accidentes'] = lt.newList('SINGLE_LINKED', compareIds)
-    analyzer['fechas'] = om.newMap(omaptype='BST',
+    analyzer['fechas'] = om.newMap(omaptype='RBT',
                                    comparefunction=compareDates)
 
     return analyzer
@@ -96,8 +99,69 @@ def req1 (analyzer, fecha):
     else:
         return None
 
-def req2 (analyzer, fecha):
-    pass
+def req2 (analyzer, fecha_min, fecha):
+    
+    lst = om.keys(analyzer['fechas'], fecha_min, fecha)
+    total = 0
+    maxi = 0
+    mas_acc = fecha_min
+    iterator = it.newIterator(lst)
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        
+        if type(element) == type(fecha):
+            valor = req1(analyzer, element)
+            total += lt.size(valor['id'])
+            if lt.size(valor['id']) > maxi:
+                mas_acc = element
+                maxi = lt.size(valor['id'])
+        else:
+            total += lt.size(element['id'])
+            if lt.size(element['id']) > maxi:
+                mas_acc = element
+                maxi = lt.size(valor['id'])
+
+    return (total, mas_acc, maxi)
+
+def req6 (analyzer, lat_centro, lon_centro, radio):
+    total = 0
+    dias = {'Lunes': 0,
+            'Martes': 0,
+            'Miercoles': 0,
+            'Jueves': 0,
+            'Viernes': 0,
+            'Sabado': 0,
+            'Domingo': 0
+            }
+    iterator = it.newIterator(analyzer['accidentes'])
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        haver_entrada = (math.sin( math.radians((float(element['Start_Lat']) - lat_centro)) /2 ))**2 \
+                        + math.cos(math.radians(float(element['Start_Lat']))) \
+                        * math.cos(math.radians(float(element['Start_Lat']))) \
+                        * (math.sin(math.radians((float(element['Start_Lng']) - lon_centro)) /2 ))**2
+        d = 2*6371*math.asin(math.sqrt(haver_entrada))
+        if d <= radio:
+            total += 1
+            occurreddate = element['Start_Time']
+            accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
+            if accidentdate.weekday() == 0:
+                dias['Lunes'] += 1
+            elif accidentdate.weekday() == 1:
+                dias['Martes'] += 1
+            elif accidentdate.weekday() == 2:
+                dias['Miercoles'] += 1
+            elif accidentdate.weekday() == 3:
+                dias['Jueves'] += 1
+            elif accidentdate.weekday() == 4:
+                dias['Viernes'] += 1
+            elif accidentdate.weekday() == 5:
+                dias['Sabado'] += 1
+            elif accidentdate.weekday() == 6:
+                dias['Domingo'] += 1
+    return (total, dias)
+        
+
 
 
 # ==============================

@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from App import controller
 assert config
+import datetime
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -37,8 +38,17 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
+sys.setrecursionlimit(3000000)
 
-accfile = "Data\\us_accidents_small.csv"
+#accfile = "Data\\us_accidents_small.csv"
+accfile = "Data\\Acc2016.csv"
+#accfile = 'Data\\Acc2017.csv'
+#accfile = 'Data\\Acc2018.csv'
+#accfile = 'Data\\Acc2019.csv'
+#accfile = 'Data\\AccTodos.csv'
+
+mini = '2016-02-08'
+fecha_min = datetime.datetime.strptime(mini, '%Y-%m-%d')
 
 # ___________________________________________________
 #  Menu principal
@@ -53,6 +63,7 @@ def printMenu():
     print("2- Cargar información de accidentes")
     print("3- Requerimento 1")
     print("4- Requerimento 2")
+    print("5- Requerimento 6")
     print("0- Salir")
     print("*******************************************")
 
@@ -71,6 +82,7 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nCargando información de accidentes ....")
         accidentes = controller.loadData(analyzer, accfile)
+        
     
 
     elif int(inputs[0]) == 3:
@@ -81,7 +93,16 @@ while True:
 
 
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 1 del reto 3: ")
+        print("\nReq2 ")
+        fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
+        controller.ejecutarreq2(accidentes, fecha_min, fecha)
+    
+    elif int(inputs[0]) == 5:
+        print("\nReq6 ")
+        radio = float(input('Ingrese el radio en kilómetros: \n'))
+        lat = float(input('Ingrese la latitud: \n'))
+        lon = float(input('Ingrese la longitud: \n'))
+        controller.ejecutarreq6(analyzer, lat, lon, radio)
 
     else:
         sys.exit(0)

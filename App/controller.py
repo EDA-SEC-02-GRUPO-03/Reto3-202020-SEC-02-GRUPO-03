@@ -40,6 +40,7 @@ recae sobre el controlador.
 # ___________________________________________________
 
 
+
 def init():
     """
     Llama la funcion de inicializacion del modelo.
@@ -73,12 +74,28 @@ def ejecutarreq1 (analyzer,fecha):
     result = model.req1(analyzer,fecha.date())
     if result != None:
         total = 0
-        for i in result:
-            total += result[i]
-            print ('De severidad '+i+' hubo '+str(result[i])+' accidentes')
-            print ('Hubo '+str(total)+' accidentes en esa fecha.')
+        for i in result['severidades']:
+            total += result['severidades'][i]
+            print ('De severidad '+i+' hubo '+str(result['severidades'][i])+' accidentes')
+        print ('Hubo '+str(lt.size(result['id']))+' accidentes en esa fecha.')
     else:
         print ('No se encontró nada en esa fecha')
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')
-    
+
+def ejecutarreq2 (analyzer,fecha_min, fecha):
+    t_i = process_time()
+    fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
+    result = model.req2(analyzer,fecha_min.date(), fecha.date())
+    print ('Entre esas fechas hubo', result[0], 'accidentes')
+    print ('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
+
+def ejecutarreq6 (analyzer, lat, lon, radio):
+    t_i = process_time()
+    result = model.req6(analyzer, lat, lon, radio)
+    print ('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
+    print (result[1])
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
