@@ -101,16 +101,16 @@ def req4(analyzer, fechami, fechama):
     t_i = process_time()
     fechamin = datetime.datetime.strptime(fechami, '%Y-%m-%d')
     fechamax = datetime.datetime.strptime(fechama, '%Y-%m-%d')
-# try:
-    result = model.req4(analyzer, fechamin.date(), fechamax.date())
-    print('El estado con más accidentes entre', fechami, 'y', fechama, \
-            'es:\n -', result[0], 'con', result[1], 'accidentes.')
-    print(' - La fecha con más accidentes para este estado es:', result[2])
-# except:
-    # print('Hubo un error con el rango de fechas')
-# finally:
-    t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    try:
+        result = model.req4(analyzer, fechamin.date(), fechamax.date())
+        print('El estado con más accidentes entre', fechami, 'y', fechama, \
+                'es:\n -', result[0], 'con', result[1], 'accidentes.')
+        print(' - La fecha con más accidentes para este estado es:', result[2])
+    except:
+        print('Hubo un error con el rango de fechas')
+    finally:
+        t_f = process_time()
+        print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 
 def req5(analyzer, h1, h2):
