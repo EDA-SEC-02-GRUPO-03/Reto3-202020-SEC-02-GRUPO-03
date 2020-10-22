@@ -94,13 +94,8 @@ def ejecutarreq2 (analyzer,fecha_min, fecha):
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')
 
-def ejecutarreq6 (analyzer, lat, lon, radio):
-    t_i = process_time()
-    result = model.req6(analyzer, lat, lon, radio)
-    print ('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
-    print (result[1])
-    t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+def req3 ():
+    pass
 
 def req4(analyzer, fechami, fechama):
     t_i = process_time()
@@ -153,7 +148,13 @@ def req5(analyzer, h1, h2):
             t_f = process_time()
             print ('Procesado en: '+ str(t_f - t_i) + 's')
 
-
+def ejecutarreq6 (analyzer, lat, lon, radio):
+    t_i = process_time()
+    result = model.req6(analyzer, lat, lon, radio)
+    print ('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
+    print (result[1])
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 def crimesSize(analyzer):
     """
