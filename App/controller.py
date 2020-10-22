@@ -117,14 +117,15 @@ def req5(analyzer, h1, h2):
     t_i = process_time()
     if int(h1[3:]) < 15:
         h1 = h1[:2] + ':00'
-    elif int(h2[3:]) < 15:
-        h2 = h2[:2] + ':00'
     elif int(h1[3:]) >= 15 and int(h1[3:]) < 45:
         h1 = h1[:2] + ':30'
-    elif int(h2[3:]) >= 15 and int(h2[3:]) < 45:
-        h2 = h2[:2] + ':30'
     elif int(h1[3:]) >= 45:
         h1 = str(int(h1[:2]) + 1) + ':00'
+
+    if int(h2[3:]) < 15:
+        h2 = h2[:2] + ':00'
+    elif int(h2[3:]) >= 15 and int(h2[3:]) < 45:
+        h2 = h2[:2] + ':30'
     elif int(h2[3:]) >= 45:
         h2 = str(int(h2[:2]) + 1) + ':00'
 
