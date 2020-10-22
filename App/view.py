@@ -40,15 +40,8 @@ operación seleccionada.
 
 sys.setrecursionlimit(3000000)
 
-#accfile = "Data\\us_accidents_small.csv"
-accfile = "Data\\Acc2016.csv"
-#accfile = 'Data\\Acc2017.csv'
-#accfile = 'Data\\Acc2018.csv'
-#accfile = 'Data\\Acc2019.csv'
-#accfile = 'Data\\AccTodos.csv'
-
-mini = '2016-02-08'
-fecha_min = datetime.datetime.strptime(mini, '%Y-%m-%d')
+accfile = "Data\\us_accidents_small.csv"
+# accfile = "Data\\us_accidents_dis_2017.csv"
 
 # ___________________________________________________
 #  Menu principal
@@ -63,7 +56,11 @@ def printMenu():
     print("2- Cargar información de accidentes")
     print("3- Requerimento 1")
     print("4- Requerimento 2")
-    print("5- Requerimento 6")
+    print("5- Requerimento 3")
+    print("6- Requerimento 4")
+    print("7- Requerimento 5")
+    print("8- Requerimento 6")
+    print("9- Requerimento 7")
     print("0- Salir")
     print("*******************************************")
 
@@ -77,19 +74,22 @@ while True:
 
     if int(inputs[0]) == 1:
         print("\nInicializando....")
-        analyzer = controller.init()
+        cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de accidentes ....")
-        accidentes = controller.loadData(analyzer, accfile)
-        
-    
+        print("\nCargando información de crimenes ....")
+        controller.loadData(cont, accfile)
+        print('Crimenes cargados: ' + str(controller.crimesSize(cont)))
+        print('Altura del arbol: ' + str(controller.indexHeight(cont)))
+        print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
+        print('Menor Llave: ' + str(controller.minKey(cont)))
+        print('Mayor Llave: ' + str(controller.maxKey(cont)))
+
 
     elif int(inputs[0]) == 3:
-        print("\nReq1: ")
+        print("\nRequerimiento No 1 del reto 3: ")
         fecha = input('Ingrese la fecha YYYY-MM-DD: \n')
-        controller.ejecutarreq1(accidentes, fecha)
-
+        controller.req1(cont, fecha)
 
 
     elif int(inputs[0]) == 4:
@@ -103,6 +103,21 @@ while True:
         lat = float(input('Ingrese la latitud: \n'))
         lon = float(input('Ingrese la longitud: \n'))
         controller.ejecutarreq6(analyzer, lat, lon, radio)
+        pass
+
+
+    elif int(inputs[0]) == 6:
+        print("\nRequerimiento No 4 del reto 3: ")
+        fechamin = input('Ingrese la fecha menor YYYY-MM-DD: \n')
+        fechamax = input('Ingrese la fecha mayor YYYY-MM-DD: \n')
+        controller.req4(cont, fechamin, fechamax)
+
+    elif int(inputs[0]) == 7:
+        print("\nRequerimiento No 5 del reto 3: ")
+        h1 = input('Ingrese la hora menor en formato 24h (HH:MM): \n')
+        h2 = input('Ingrese la hora mayor en formato 24h (HH:MM): \n')
+        controller.req5(cont, h1, h2)
+
 
     else:
         sys.exit(0)
