@@ -40,7 +40,6 @@ recae sobre el controlador.
 # ___________________________________________________
 
 
-
 def init():
     """
     Llama la funcion de inicializacion del modelo.
@@ -61,7 +60,7 @@ def loadData(analyzer, accidentsfile):
     for accident in input_file:
         model.addAccident(analyzer, accident)
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
     return analyzer
 
 
@@ -73,29 +72,32 @@ def loadData(analyzer, accidentsfile):
 def req1(analyzer, fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
-    result = model.req1(analyzer,fecha.date())
-    if result != None:
+    result = model.req1(analyzer, fecha.date())
+    if result is None:
         total = 0
         for i in result['severidades']:
             total += result['severidades'][i]
-            print ('De severidad '+i+' hubo '+str(result['severidades'][i])+' accidentes')
-        print ('Hubo '+str(lt.size(result['id']))+' accidentes en esa fecha.')
+            print('De severidad '+i+' hubo '+str(result['severidades'][i]) + ' accidentes')
+        print('Hubo '+str(lt.size(result['id']))+' accidentes en esa fecha.')
     else:
-        print ('No se encontró nada en esa fecha')
+        print('No se encontró nada en esa fecha')
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
 
-def ejecutarreq2 (analyzer,fecha_min, fecha):
+
+def ejecutarreq2(analyzer, fecha_min, fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
-    result = model.req2(analyzer,fecha_min.date(), fecha.date())
-    print ('Entre esas fechas hubo', result[0], 'accidentes')
-    print ('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
+    result = model.req2(analyzer, fecha_min.date(), fecha.date())
+    print('Entre esas fechas hubo', result[0], 'accidentes')
+    print('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
 
-def req3 ():
+
+def req3():
     pass
+
 
 def req4(analyzer, fechami, fechama):
     t_i = process_time()
@@ -103,14 +105,14 @@ def req4(analyzer, fechami, fechama):
     fechamax = datetime.datetime.strptime(fechama, '%Y-%m-%d')
     try:
         result = model.req4(analyzer, fechamin.date(), fechamax.date())
-        print('El estado con más accidentes entre', fechami, 'y', fechama, \
-                'es:\n -', result[0], 'con', result[1], 'accidentes.')
+        print('El estado con más accidentes entre', fechami, 'y', fechama,
+              'es:\n -', result[0], 'con', result[1], 'accidentes.')
         print(' - La fecha con más accidentes para este estado es:', result[2])
     except:
         print('Hubo un error con el rango de fechas')
     finally:
         t_f = process_time()
-        print ('Procesado en: '+ str(t_f - t_i) + 's')
+        print('Procesado en: ' + str(t_f - t_i) + 's')
 
 
 def req5(analyzer, h1, h2):
@@ -142,7 +144,7 @@ def req5(analyzer, h1, h2):
         try:
             result = model.req5(analyzer, h1, h2)
             print('Los resultados entre las', h1, 'y', h2,
-                  'son:\n -', result['porc'], '% (', result['total'], ') del', \
+                  'son:\n -', result['porc'], '% (', result['total'], ') del',
                   'total de accidentes. Se agrupan de la siguente manera:')
             for i in range(1, 5):
                 print('severidad', i, ':\t', result[str(i)])
@@ -150,15 +152,17 @@ def req5(analyzer, h1, h2):
             print('Hubo un error con el rango de fechas')
         finally:
             t_f = process_time()
-            print ('Procesado en: '+ str(t_f - t_i) + 's')
+            print('Procesado en: ' + str(t_f - t_i) + 's')
 
-def ejecutarreq6 (analyzer, lat, lon, radio):
+
+def ejecutarreq6(analyzer, lat, lon, radio):
     t_i = process_time()
     result = model.req6(analyzer, lat, lon, radio)
-    print ('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
-    print (result[1])
+    print('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
+    print(result[1])
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
+
 
 def crimesSize(analyzer):
     """

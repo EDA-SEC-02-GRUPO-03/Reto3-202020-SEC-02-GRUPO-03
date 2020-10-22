@@ -87,7 +87,7 @@ def updateDateIndex(analyzer, accident):
         om.put(analyzer['fechas'], accidentdate.date(), {'id': lista, 'severidades': severidades})
     else:
         dicc = me.getValue(entry)
-        lt.addLast(dicc['id'],ID)
+        lt.addLast(dicc['id'], ID)
         if severidad in dicc['severidades']:
             dicc['severidades'][severidad] += 1
         else:
@@ -100,14 +100,14 @@ def updateDateIndex(analyzer, accident):
 # ==============================
 
 
-def req1 (analyzer, fecha):
+def req1(analyzer, fecha):
 
     entry = om.get(analyzer['fechas'], fecha)
     dicc = me.getValue(entry)
     return dicc
 
 
-def req2 (analyzer, fecha_min, fecha):
+def req2(analyzer, fecha_min, fecha):
 
     lst = om.keys(analyzer['fechas'], fecha_min, fecha)
     total = 0
@@ -131,7 +131,8 @@ def req2 (analyzer, fecha_min, fecha):
 
     return (total, mas_acc, maxi)
 
-def req3 (analyzer, fecha):
+
+def req3(analyzer, fecha):
     pass
 
 
@@ -180,7 +181,7 @@ def req4(analyzer, fechamin, fechamax):
     return mayor
 
 
-def req5 (analyzer, h1, h2):
+def req5(analyzer, h1, h2):
     n_acc = {'total': 0,
              '1': 0,
              '2': 0,
@@ -189,9 +190,9 @@ def req5 (analyzer, h1, h2):
     for i in range(1, lt.size(analyzer['accidentes']) + 1):
         info = lt.getElement(analyzer['accidentes'], i)
 
-        comp_menor = compareHours(datetime.datetime.strptime( \
+        comp_menor = compareHours(datetime.datetime.strptime(
            info['Start_Time'][-8:-3], '%H:%M'), h1)
-        comp_mayor = compareHours(datetime.datetime.strptime( \
+        comp_mayor = compareHours(datetime.datetime.strptime(
            info['End_Time'][-8:-3], '%H:%M'), h2)
 
         if (comp_menor == 1 or comp_menor == 0) and \
@@ -203,7 +204,7 @@ def req5 (analyzer, h1, h2):
     return n_acc
 
 
-def req6 (analyzer, lat_centro, lon_centro, radio):
+def req6(analyzer, lat_centro, lon_centro, radio):
     total = 0
     dias = {'Lunes': 0,
             'Martes': 0,
@@ -216,10 +217,10 @@ def req6 (analyzer, lat_centro, lon_centro, radio):
     iterator = it.newIterator(analyzer['accidentes'])
     while it.hasNext(iterator):
         element = it.next(iterator)
-        haver_entrada = (math.sin( math.radians((float(element['Start_Lat']) - lat_centro)) /2 ))**2 \
+        haver_entrada = (math.sin(math.radians((float(element['Start_Lat']) - lat_centro)) / 2))**2 \
                         + math.cos(math.radians(float(element['Start_Lat']))) \
                         * math.cos(math.radians(float(element['Start_Lat']))) \
-                        * (math.sin(math.radians((float(element['Start_Lng']) - lon_centro)) /2 ))**2
+                        * (math.sin(math.radians((float(element['Start_Lng']) - lon_centro)) / 2))**2
         d = 2*6371*math.asin(math.sqrt(haver_entrada))
         if d <= radio:
             total += 1
@@ -273,7 +274,6 @@ def maxKey(analyzer):
     return om.maxKey(analyzer['fechas'])
 
 
-
 # ==============================
 # Funciones de Comparacion
 # ==============================
@@ -308,6 +308,7 @@ def compareOffenses(offense1, offense2):
         return 1
     else:
         return -1
+
 
 def compareHours(h1, h2):
     h1 = str(h1)

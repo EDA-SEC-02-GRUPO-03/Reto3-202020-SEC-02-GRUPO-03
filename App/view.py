@@ -22,10 +22,10 @@
 
 import sys
 import config
+import datetime
 from DISClib.ADT import list as lt
 from App import controller
 assert config
-import datetime
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -84,12 +84,10 @@ while True:
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
 
-
     elif int(inputs[0]) == 3:
         print("\nRequerimiento No 1 del reto 3: ")
         fecha = input('Ingrese la fecha YYYY-MM-DD: \n')
         controller.req1(cont, fecha)
-
 
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 2 del reto 3: ")
