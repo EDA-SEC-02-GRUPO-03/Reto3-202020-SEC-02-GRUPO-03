@@ -40,8 +40,8 @@ operación seleccionada.
 
 sys.setrecursionlimit(3000000)
 
-accfile = "Data\\us_accidents_small.csv"
-# accfile = "Data\\us_accidents_dis_2017.csv"
+#accfile = "Data\\us_accidents_small.csv"
+accfile = "Data\\Acc2017.csv"
 
 # ___________________________________________________
 #  Menu principal
@@ -60,7 +60,6 @@ def printMenu():
     print("6- Requerimento 4")
     print("7- Requerimento 5")
     print("8- Requerimento 6")
-    print("9- Requerimento 7")
     print("0- Salir")
     print("*******************************************")
 
@@ -77,9 +76,9 @@ while True:
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de crimenes ....")
+        print("\nCargando información de accidentes ....")
         controller.loadData(cont, accfile)
-        print('Crimenes cargados: ' + str(controller.crimesSize(cont)))
+        print('Accidentes cargados: ' + str(controller.crimesSize(cont)))
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
@@ -93,18 +92,12 @@ while True:
 
 
     elif int(inputs[0]) == 4:
-        print("\nReq2 ")
+        print("\nRequerimiento No 2 del reto 3: ")
         fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
-        controller.ejecutarreq2(accidentes, fecha_min, fecha)
+        controller.ejecutarreq2(cont, controller.minKey(cont), fecha)
     
     elif int(inputs[0]) == 5:
-        print("\nReq6 ")
-        radio = float(input('Ingrese el radio en kilómetros: \n'))
-        lat = float(input('Ingrese la latitud: \n'))
-        lon = float(input('Ingrese la longitud: \n'))
-        controller.ejecutarreq6(analyzer, lat, lon, radio)
-        pass
-
+        print("\nRequerimiento No 3 del reto 3: ")
 
     elif int(inputs[0]) == 6:
         print("\nRequerimiento No 4 del reto 3: ")
@@ -118,6 +111,12 @@ while True:
         h2 = input('Ingrese la hora mayor en formato 24h (HH:MM): \n')
         controller.req5(cont, h1, h2)
 
+    elif int(inputs[0]) == 8:
+        print("\nRequerimiento No 6 del reto 3 (bono): ")
+        radio = float(input('Ingrese el radio en kilómetros: \n'))
+        lat = float(input('Ingrese la latitud: \n'))
+        lon = float(input('Ingrese la longitud: \n'))
+        controller.ejecutarreq6(cont, lat, lon, radio)
 
     else:
         sys.exit(0)
