@@ -108,7 +108,7 @@ def req1 (analyzer, fecha):
 
 
 def req2 (analyzer, fecha_min, fecha):
-    
+
     lst = om.keys(analyzer['fechas'], fecha_min, fecha)
     total = 0
     maxi = 0
@@ -116,7 +116,7 @@ def req2 (analyzer, fecha_min, fecha):
     iterator = it.newIterator(lst)
     while it.hasNext(iterator):
         element = it.next(iterator)
-        
+
         if type(element) == type(fecha):
             valor = req1(analyzer, element)
             total += lt.size(valor['id'])
@@ -170,7 +170,6 @@ def req4(analyzer, fechamin, fechamax):
 
     mayor = ('ninguno', 0)
     for i in estados.keys():
-        # print(estados[i])
         if estados[i]['cont'] >= estados[mayor[0]]['cont']:
             fechamay = ('none', 0)
             for j in estados[i].keys():
@@ -189,10 +188,14 @@ def req5 (analyzer, h1, h2):
              '4': 0}
     for i in range(1, lt.size(analyzer['accidentes']) + 1):
         info = lt.getElement(analyzer['accidentes'], i)
-        if datetime.datetime.__ge__(datetime.datetime.strptime( \
-           info['Start_Time'][-8:-3], '%H:%M'), h1) and \
-           datetime.datetime.__le__(datetime.datetime.strptime( \
-           info['End_Time'][-8:-3], '%H:%M'), h2):
+
+        comp_menor = compareHours(datetime.datetime.strptime( \
+           info['Start_Time'][-8:-3], '%H:%M'), h1)
+        comp_mayor = compareHours(datetime.datetime.strptime( \
+           info['End_Time'][-8:-3], '%H:%M'), h2)
+
+        if (comp_menor == 1 or comp_menor == 0) and \
+           (comp_mayor == -1 or comp_mayor == 0):
             n_acc['total'] += 1
             n_acc[info['Severity']] += 1
     porc = round(n_acc['total'] * 100 / accidentesSize(analyzer), 2)
@@ -238,7 +241,7 @@ def req6 (analyzer, lat_centro, lon_centro, radio):
                 dias['Domingo'] += 1
     return (total, dias)
 
-    
+
 def accidentesSize(analyzer):
     """
     Número de libros en el catago
@@ -303,5 +306,20 @@ def compareOffenses(offense1, offense2):
         return 0
     elif (offense1 > offense):
         return 1
+    else:
+        return -1
+
+def compareHours(h1, h2):
+    h1 = str(h1)
+    h2 = str(h2)
+    if h1[-8:-3] == h2[-8:-3]:
+        return 0
+    elif int(h1[-8:-6]) > int(h2[-8:-6]):
+        return 1
+    elif int(h1[-8:-6]) == int(h2[-8:-6]):
+        if int(h1[-5:-3]) < int(h2[-5:-3]):
+            return -1
+        else:
+            return 1
     else:
         return -1

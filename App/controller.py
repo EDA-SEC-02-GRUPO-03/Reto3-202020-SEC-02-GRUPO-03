@@ -119,19 +119,22 @@ def req5(analyzer, h1, h2):
         h1 = h1[:2] + ':00'
     elif int(h1[3:]) >= 15 and int(h1[3:]) < 45:
         h1 = h1[:2] + ':30'
+    elif int(h1[3:]) >= 45 and int(h1[:2]) == 23:
+        h1 = '23:59'
     elif int(h1[3:]) >= 45:
-        h1 = str(int(h1[:2]) + 1) + ':00'
+        h1 = str(int(h1[:2]) + 1).zfill(2) + ':00'
 
     if int(h2[3:]) < 15:
         h2 = h2[:2] + ':00'
     elif int(h2[3:]) >= 15 and int(h2[3:]) < 45:
         h2 = h2[:2] + ':30'
+    elif int(h2[3:]) >= 45 and int(h2[:2]) == 23:
+        h2 = '23:59'
     elif int(h2[3:]) >= 45:
         h2 = str(int(h2[:2]) + 1) + ':00'
 
-    if int(h1[3:]) >= 60 or int(h2[3:]) >= 60 or \
-        int(h1[:2]) >= 24 or int(h2[:2]) >= 24 or len(h1 + h2) < 10:
-        print('Hora no válida\n')
+    if int(h1[:-3]) > 24 or int(h2[:-3]) > 24 or len(h1 + h2) < 10:
+        print('Hora no válida', h1, h2)
 
     else:
         h1 = datetime.time(int(h1[:2]), int(h1[3:]))
@@ -139,8 +142,8 @@ def req5(analyzer, h1, h2):
         try:
             result = model.req5(analyzer, h1, h2)
             print('Los resultados entre las', h1, 'y', h2,
-                    'son:\n -', result['porc'], '% (', result['total'], ') del', \
-                    'total de accidentes. Se agrupan de la suiguente manera:')
+                  'son:\n -', result['porc'], '% (', result['total'], ') del', \
+                  'total de accidentes. Se agrupan de la siguente manera:')
             for i in range(1, 5):
                 print('severidad', i, ':\t', result[str(i)])
         except:

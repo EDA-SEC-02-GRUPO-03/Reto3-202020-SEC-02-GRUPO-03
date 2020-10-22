@@ -40,8 +40,8 @@ operación seleccionada.
 
 sys.setrecursionlimit(3000000)
 
-#accfile = "Data\\us_accidents_small.csv"
-accfile = "Data\\Acc2017.csv"
+accfile = "Data\\us_accidents_small.csv"
+# accfile = "Data\\Acc2017.csv"
 
 # ___________________________________________________
 #  Menu principal
@@ -95,7 +95,7 @@ while True:
         print("\nRequerimiento No 2 del reto 3: ")
         fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
         controller.ejecutarreq2(cont, controller.minKey(cont), fecha)
-    
+
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")
 
