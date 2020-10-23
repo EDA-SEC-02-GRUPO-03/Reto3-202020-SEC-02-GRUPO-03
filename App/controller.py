@@ -96,7 +96,17 @@ def ejecutarreq2(analyzer, fecha_min, fecha):
 
 
 def req3():
-    pass
+    t_i = process_time()
+    fecha1 = datetime.datetime.strptime(datelo, '%Y-%m-%d')
+    fecha2 = datetime.datetime.strptime(datehi, '%Y-%m-%d')
+    result = model.req3(analyzer, fecha1.date(), fecha2.date())
+    if result:
+        print('En el rango de fechas: ',fecha1, ' a ', fecha2, ' ocurrieron ', result[1], ' accidentes.')
+        print('La categoría que más se repitió fue: ', result[0]['categoria'], ' con ', result[0]['mayor'], ' ocurrencias.')
+    else:
+        print('No se encontraron datos para ese rango de fechas.')
+    t_f = process_time()
+    print('Procesado en: ' + str(t_f - t_i) + 's')
 
 
 def req4(analyzer, fechami, fechama):
