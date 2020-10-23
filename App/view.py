@@ -40,7 +40,8 @@ operación seleccionada.
 
 sys.setrecursionlimit(3000000)
 
-accfile = "Data\\us_accidents_small.csv"
+# accfile = "Data\\us_accidents_small.csv"
+accfile = "Data/us_accidents_small.csv"
 # accfile = "Data\\Acc2017.csv"
 
 # ___________________________________________________
