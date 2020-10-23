@@ -40,7 +40,8 @@ operación seleccionada.
 
 sys.setrecursionlimit(3000000)
 
-accfile = "Data\\us_accidents_small.csv"
+# accfile = "Data\\us_accidents_small.csv"
+accfile = "Data/us_accidents_small.csv"
 # accfile = "Data\\Acc2017.csv"
 
 # ___________________________________________________
@@ -96,6 +97,9 @@ while True:
 
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")
+        datelo = input('Ingrese la primera fecha (formato YYYY-MM-DD): \n')
+        datehi = input('Ingrese la segunda fecha (formato YYYY-MM-DD): \n')
+        controller.req3(cont, datelo, datehi)
 
     elif int(inputs[0]) == 6:
         print("\nRequerimiento No 4 del reto 3: ")

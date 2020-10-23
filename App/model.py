@@ -132,9 +132,44 @@ def req2(analyzer, fecha_min, fecha):
     return (total, mas_acc, maxi)
 
 
-def req3(analyzer, fecha):
-    pass
+def req3(analyzer, datelo, datehi):
+    """
+    A partir de un rango de fechas retorna la categoría de accidentes que más se repite.
 
+    Valeria Marin 
+    """
+    rango = om.keys(analyzer['fechas'], datelo, datehi)
+    fechas = analyzer['fechas']
+    accidentes = analyzer['accidentes']
+    total_en_rango = 0
+    cat = {}
+
+    iterator = it.newIterator(rango)
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        total_en_rango += 1
+
+        if type(element) == type(datehi):
+            entry = om.get(fechas, element)
+
+            for i in range(lt.size(entry['value']['id'])):
+                acc_id = lt.getElement(entry['value']['id'], i)
+                acc_info = lt.getElement(accidentes, acc_id)
+                acc_cat = acc_info['Severity']
+
+        if cat.get(acc_cat):
+            cat[acc_cat] += 1
+        else:
+            cat[acc_cat] = 1
+
+    mayor_categoria = {'mayor' : 0, 
+                       'categoria' : None}             
+    for i in cat:
+        if cat[i] > mayor_categoria['mayor']:
+            mayor_categoria['mayor'] = cat[i]
+            mayor_categoria['categoria'] = i
+         
+    return (mayor_categoria, total_en_rango)
 
 def req4(analyzer, fechamin, fechamax):
     """
