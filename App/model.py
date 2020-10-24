@@ -136,7 +136,7 @@ def req3(analyzer, datelo, datehi):
     """
     A partir de un rango de fechas retorna la categoría de accidentes que más se repite.
 
-    Valeria Marin 
+    Valeria Marin
     """
     rango = om.keys(analyzer['fechas'], datelo, datehi)
     fechas = analyzer['fechas']
@@ -162,13 +162,13 @@ def req3(analyzer, datelo, datehi):
                 else:
                     cat[acc_cat] = 1
 
-    mayor_categoria = {'mayor' : 0, 
-                       'categoria' : None}             
+    mayor_categoria = {'mayor' : 0,
+                       'categoria' : None}
     for i in cat:
         if cat[i] > mayor_categoria['mayor']:
             mayor_categoria['mayor'] = cat[i]
             mayor_categoria['categoria'] = i
-         
+
     return (mayor_categoria, total_en_rango)
 
 
