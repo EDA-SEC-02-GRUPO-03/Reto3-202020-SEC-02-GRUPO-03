@@ -95,7 +95,7 @@ def ejecutarreq2(analyzer, fecha_min, fecha):
     print('Procesado en: ' + str(t_f - t_i) + 's')
 
 
-def req3():
+def req3(analyzer, datelo, datehi):
     t_i = process_time()
     fecha1 = datetime.datetime.strptime(datelo, '%Y-%m-%d')
     fecha2 = datetime.datetime.strptime(datehi, '%Y-%m-%d')
