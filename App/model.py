@@ -147,7 +147,6 @@ def req3(analyzer, datelo, datehi):
     iterator = it.newIterator(rango)
     while it.hasNext(iterator):
         element = it.next(iterator)
-        total_en_rango += 1
 
         if type(element) == type(datehi):
             entry = om.get(fechas, element)
@@ -156,11 +155,12 @@ def req3(analyzer, datelo, datehi):
                 acc_id = lt.getElement(entry['value']['id'], i)
                 acc_info = lt.getElement(accidentes, acc_id)
                 acc_cat = acc_info['Severity']
+                total_en_rango += 1
 
-        if cat.get(acc_cat):
-            cat[acc_cat] += 1
-        else:
-            cat[acc_cat] = 1
+                if cat.get(acc_cat):
+                    cat[acc_cat] += 1
+                else:
+                    cat[acc_cat] = 1
 
     mayor_categoria = {'mayor' : 0, 
                        'categoria' : None}             
