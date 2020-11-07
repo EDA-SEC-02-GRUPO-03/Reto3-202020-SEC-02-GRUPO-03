@@ -40,7 +40,6 @@ recae sobre el controlador.
 # ___________________________________________________
 
 
-
 def init():
     """
     Llama la funcion de inicializacion del modelo.
@@ -61,7 +60,7 @@ def loadData(analyzer, accidentsfile):
     for accident in input_file:
         model.addAccident(analyzer, accident)
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
     return analyzer
 
 
@@ -84,55 +83,71 @@ def req1(analyzer, fecha):
     except:
         print ('No se encontró nada en esa fecha') 
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
 
-def ejecutarreq2 (analyzer, fecha):
+
+def ejecutarreq2(analyzer, fecha_min, fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
-    fecha_min = minKey(analyzer)
-    result = model.req2(analyzer,fecha_min, fecha.date())
-    print ('Entre esas fechas hubo', result[0], 'accidentes')
-    print ('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
+    result = model.req2(analyzer, fecha_min.date(), fecha.date())
+    print('Entre esas fechas hubo', result[0], 'accidentes')
+    print('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
 
-def req3 ():
-    pass
+
+def req3(analyzer, datelo, datehi):
+    t_i = process_time()
+    fecha1 = datetime.datetime.strptime(datelo, '%Y-%m-%d')
+    fecha2 = datetime.datetime.strptime(datehi, '%Y-%m-%d')
+    result = model.req3(analyzer, fecha1.date(), fecha2.date())
+    if result:
+        print('En el rango de fechas: ',fecha1, ' a ', fecha2, ' ocurrieron ', result[1], ' accidentes.')
+        print('La categoría que más se repitió fue: ', result[0]['categoria'], ' con ', result[0]['mayor'], ' ocurrencias.')
+    else:
+        print('No se encontraron datos para ese rango de fechas.')
+    t_f = process_time()
+    print('Procesado en: ' + str(t_f - t_i) + 's')
+
 
 def req4(analyzer, fechami, fechama):
     t_i = process_time()
     fechamin = datetime.datetime.strptime(fechami, '%Y-%m-%d')
     fechamax = datetime.datetime.strptime(fechama, '%Y-%m-%d')
-# try:
-    result = model.req4(analyzer, fechamin.date(), fechamax.date())
-    print('El estado con más accidentes entre', fechami, 'y', fechama, \
-            'es:\n -', result[0], 'con', result[1], 'accidentes.')
-    print(' - La fecha con más accidentes para este estado es:', result[2])
-# except:
-    # print('Hubo un error con el rango de fechas')
-# finally:
-    t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    try:
+        result = model.req4(analyzer, fechamin.date(), fechamax.date())
+        print('El estado con más accidentes entre', fechami, 'y', fechama,
+              'es:\n -', result[0], 'con', result[1], 'accidentes.')
+        print(' - La fecha con más accidentes para este estado es:', result[2])
+    except:
+        print('Hubo un error con el rango de fechas')
+    finally:
+        t_f = process_time()
+        print('Procesado en: ' + str(t_f - t_i) + 's')
 
 
 def req5(analyzer, h1, h2):
     t_i = process_time()
     if int(h1[3:]) < 15:
         h1 = h1[:2] + ':00'
-    elif int(h2[3:]) < 15:
-        h2 = h2[:2] + ':00'
     elif int(h1[3:]) >= 15 and int(h1[3:]) < 45:
         h1 = h1[:2] + ':30'
+    elif int(h1[3:]) >= 45 and int(h1[:2]) == 23:
+        h1 = '23:59'
+    elif int(h1[3:]) >= 45:
+        h1 = str(int(h1[:2]) + 1).zfill(2) + ':00'
+
+    if int(h2[3:]) < 15:
+        h2 = h2[:2] + ':00'
     elif int(h2[3:]) >= 15 and int(h2[3:]) < 45:
         h2 = h2[:2] + ':30'
-    elif int(h1[3:]) >= 45:
-        h1 = str(int(h1[:2]) + 1) + ':00'
+    elif int(h2[3:]) >= 45 and int(h2[:2]) == 23:
+        h2 = '23:59'
     elif int(h2[3:]) >= 45:
         h2 = str(int(h2[:2]) + 1) + ':00'
 
-    if int(h1[3:]) >= 60 or int(h2[3:]) >= 60 or \
-        int(h1[:2]) >= 24 or int(h2[:2]) >= 24 or len(h1 + h2) < 10:
-        print('Hora no válida\n')
+    if int(h1[:-3]) > 24 or int(h2[:-3]) > 24 or len(h1 + h2) < 10:
+        print('Hora no válida', h1, h2)
 
     else:
         h1 = datetime.time(int(h1[:2]), int(h1[3:]))
@@ -140,23 +155,25 @@ def req5(analyzer, h1, h2):
         try:
             result = model.req5(analyzer, h1, h2)
             print('Los resultados entre las', h1, 'y', h2,
-                    'son:\n -', result['porc'], '% (', result['total'], ') del', \
-                    'total de accidentes. Se agrupan de la suiguente manera:')
+                  'son:\n -', result['porc'], '% (', result['total'], ') del',
+                  'total de accidentes. Se agrupan de la siguente manera:')
             for i in range(1, 5):
                 print('severidad', i, ':\t', result[str(i)])
         except:
             print('Hubo un error con el rango de fechas')
         finally:
             t_f = process_time()
-            print ('Procesado en: '+ str(t_f - t_i) + 's')
+            print('Procesado en: ' + str(t_f - t_i) + 's')
 
-def ejecutarreq6 (analyzer, lat, lon, radio):
+
+def ejecutarreq6(analyzer, lat, lon, radio):
     t_i = process_time()
     result = model.req6(analyzer, lat, lon, radio)
-    print ('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
-    print (result[1])
+    print('En un radio de ', radio, ' kms. hubo en total ', result[0], ' accidentes.')
+    print(result[1])
     t_f = process_time()
-    print ('Procesado en: '+ str(t_f - t_i) + 's')
+    print('Procesado en: ' + str(t_f - t_i) + 's')
+
 
 def crimesSize(analyzer):
     """

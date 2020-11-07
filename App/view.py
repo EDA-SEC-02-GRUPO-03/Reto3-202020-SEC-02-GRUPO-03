@@ -22,10 +22,10 @@
 
 import sys
 import config
+import datetime
 from DISClib.ADT import list as lt
 from App import controller
 assert config
-import datetime
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -40,8 +40,9 @@ operación seleccionada.
 
 sys.setrecursionlimit(3000000)
 
-#accfile = "Data\\us_accidents_small.csv"
-accfile = "Data\\Acc2017.csv"
+# accfile = "Data\\us_accidents_small.csv"
+accfile = "Data/us_accidents_small.csv"
+# accfile = "Data\\Acc2017.csv"
 
 # ___________________________________________________
 #  Menu principal
@@ -84,12 +85,10 @@ while True:
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
 
-
     elif int(inputs[0]) == 3:
         print("\nRequerimiento No 1 del reto 3: ")
         fecha = input('Ingrese la fecha YYYY-MM-DD: \n')
         controller.req1(cont, fecha)
-
 
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 2 del reto 3: ")
@@ -98,6 +97,9 @@ while True:
     
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")
+        datelo = input('Ingrese la primera fecha (formato YYYY-MM-DD): \n')
+        datehi = input('Ingrese la segunda fecha (formato YYYY-MM-DD): \n')
+        controller.req3(cont, datelo, datehi)
 
     elif int(inputs[0]) == 6:
         print("\nRequerimiento No 4 del reto 3: ")
