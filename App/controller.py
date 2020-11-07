@@ -73,22 +73,24 @@ def loadData(analyzer, accidentsfile):
 def req1(analyzer, fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
-    result = model.req1(analyzer,fecha.date())
-    if result != None:
-        total = 0
-        for i in result['severidades']:
-            total += result['severidades'][i]
-            print ('De severidad '+i+' hubo '+str(result['severidades'][i])+' accidentes')
-        print ('Hubo '+str(lt.size(result['id']))+' accidentes en esa fecha.')
-    else:
-        print ('No se encontró nada en esa fecha')
+    try:
+        result = model.req1(analyzer,fecha.date())
+        if result != None:
+            total = 0
+            for i in result['severidades']:
+                total += result['severidades'][i]
+                print ('De severidad '+i+' hubo '+str(result['severidades'][i])+' accidentes')
+            print ('Hubo '+str(lt.size(result['id']))+' accidentes en esa fecha.')
+    except:
+        print ('No se encontró nada en esa fecha') 
     t_f = process_time()
     print ('Procesado en: '+ str(t_f - t_i) + 's')
 
-def ejecutarreq2 (analyzer,fecha_min, fecha):
+def ejecutarreq2 (analyzer, fecha):
     t_i = process_time()
     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d')
-    result = model.req2(analyzer,fecha_min.date(), fecha.date())
+    fecha_min = minKey(analyzer)
+    result = model.req2(analyzer,fecha_min, fecha.date())
     print ('Entre esas fechas hubo', result[0], 'accidentes')
     print ('La fecha de más accidentes fue ', result[1], ', ', result[2], 'accidentes')
     t_f = process_time()
@@ -101,16 +103,16 @@ def req4(analyzer, fechami, fechama):
     t_i = process_time()
     fechamin = datetime.datetime.strptime(fechami, '%Y-%m-%d')
     fechamax = datetime.datetime.strptime(fechama, '%Y-%m-%d')
-    try:
-        result = model.req4(analyzer, fechamin.date(), fechamax.date())
-        print('El estado con más accidentes entre', fechami, 'y', fechama, \
-                'es:\n -', result[0], 'con', result[1], 'accidentes.')
-        print(' - La fecha con más accidentes para este estado es:', result[2])
-    except:
-        print('Hubo un error con el rango de fechas')
-    finally:
-        t_f = process_time()
-        print ('Procesado en: '+ str(t_f - t_i) + 's')
+# try:
+    result = model.req4(analyzer, fechamin.date(), fechamax.date())
+    print('El estado con más accidentes entre', fechami, 'y', fechama, \
+            'es:\n -', result[0], 'con', result[1], 'accidentes.')
+    print(' - La fecha con más accidentes para este estado es:', result[2])
+# except:
+    # print('Hubo un error con el rango de fechas')
+# finally:
+    t_f = process_time()
+    print ('Procesado en: '+ str(t_f - t_i) + 's')
 
 
 def req5(analyzer, h1, h2):

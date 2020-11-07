@@ -238,7 +238,7 @@ def req6 (analyzer, lat_centro, lon_centro, radio):
                 dias['Domingo'] += 1
     return (total, dias)
 
-    
+
 def accidentesSize(analyzer):
     """
     Número de libros en el catago

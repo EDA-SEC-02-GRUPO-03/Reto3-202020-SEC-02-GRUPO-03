@@ -94,7 +94,7 @@ while True:
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 2 del reto 3: ")
         fecha = input('Ingrese la fecha límite YYYY-MM-DD: \n')
-        controller.ejecutarreq2(cont, controller.minKey(cont), fecha)
+        controller.ejecutarreq2(cont, fecha)
     
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")
